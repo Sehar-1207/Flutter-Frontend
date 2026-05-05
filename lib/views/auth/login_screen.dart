@@ -159,6 +159,46 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
+              const SizedBox(height: 24),
+
+              // Google Sign In button
+              Obx(() => SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: OutlinedButton(
+                      onPressed: _auth.isLoading.value
+                          ? null
+                          : () => _auth.loginWithGoogle(),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.grey.shade300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png',
+                            height: 24,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.g_mobiledata,
+                                    color: Colors.blueAccent, size: 28),
+                          ),
+                          const SizedBox(width: 12),
+                          const Text(
+                            'Sign in with Google',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF1A1A2E),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+
               const SizedBox(height: 28),
 
               // Sign up link (only students can self-register)
@@ -168,8 +208,7 @@ class LoginScreen extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
-                      style:
-                          TextStyle(color: Colors.grey[600], fontSize: 14),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       children: const [
                         TextSpan(
                           text: 'Sign up',

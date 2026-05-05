@@ -41,6 +41,16 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  Future<Map<String, dynamic>> googleLogin(String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/google-login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'token': token}),
+    );
+
+    return _handleResponse(response);
+  }
+
   /// POST /api/auth/register  (students only)
   Future<Map<String, dynamic>> register(
       String name, String email, String password) async {
