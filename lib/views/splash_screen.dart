@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha:0.2),
                 borderRadius: BorderRadius.circular(22),
               ),
               child: const Icon(
@@ -81,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               'Attendance, simplified.',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha:0.8),
                 fontSize: 16,
               ),
             ),
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> {
           'v1.0.0',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha:0.5),
             fontSize: 13,
           ),
         ),

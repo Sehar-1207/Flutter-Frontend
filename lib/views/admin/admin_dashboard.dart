@@ -41,7 +41,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () => Get.toNamed(AppRoutes.adminProfile),
                 child: CircleAvatar(
                   radius: 18,
-                  backgroundColor: const Color(0xFF4A3AFF).withOpacity(0.1),
+                  backgroundColor: const Color(0xFF4A3AFF).withValues(alpha: 0.1),
                   child: Text(
                     initial,
                     style: const TextStyle(
@@ -252,7 +252,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -307,7 +307,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

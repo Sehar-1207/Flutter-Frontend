@@ -85,7 +85,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
               // Avatar
               CircleAvatar(
                 radius: 50,
-                backgroundColor: const Color(0xFF4A3AFF).withOpacity(0.1),
+                backgroundColor: const Color(0xFF4A3AFF).withValues(alpha:0.1),
                 child: Text(
                   name.isNotEmpty ? name[0].toUpperCase() : 'A',
                   style: const TextStyle(
@@ -109,7 +109,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00C9A7).withOpacity(0.1),
+                    color: const Color(0xFF00C9A7).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -130,7 +130,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       )

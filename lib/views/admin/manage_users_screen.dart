@@ -41,7 +41,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 decoration: const InputDecoration(labelText: 'Email'),
               ),
               DropdownButtonFormField<String>(
-                value: ['Student', 'Teacher', 'Admin'].contains(role)
+                initialValue: ['Student', 'Teacher', 'Admin'].contains(role)
                     ? role
                     : 'Student',
                 items: ['Student', 'Teacher', 'Admin']
@@ -128,7 +128,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                             _admin.fetchAllUsers(role: filter);
                           },
                           selectedColor:
-                              const Color(0xFF4A3AFF).withOpacity(0.1),
+                              const Color(0xFF4A3AFF).withValues(alpha:0.1),
                           labelStyle: TextStyle(
                             color: isSelected
                                 ? const Color(0xFF4A3AFF)
@@ -170,16 +170,16 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
                   // Role Badge Color
                   Color roleColor = Colors.grey;
-                  Color roleBg = Colors.grey.withOpacity(0.1);
+                  Color roleBg = Colors.grey.withValues(alpha:0.1);
                   if (role.toString().toLowerCase() == 'student') {
                     roleColor = const Color(0xFF4A3AFF);
-                    roleBg = const Color(0xFF4A3AFF).withOpacity(0.1);
+                    roleBg = const Color(0xFF4A3AFF).withValues(alpha:0.1);
                   } else if (role.toString().toLowerCase() == 'teacher') {
                     roleColor = const Color(0xFF00B4D8);
-                    roleBg = const Color(0xFF00B4D8).withOpacity(0.1);
+                    roleBg = const Color(0xFF00B4D8).withValues(alpha:0.1);
                   } else if (role.toString().toLowerCase() == 'admin') {
                     roleColor = const Color(0xFF00C9A7);
-                    roleBg = const Color(0xFF00C9A7).withOpacity(0.1);
+                    roleBg = const Color(0xFF00C9A7).withValues(alpha:0.1);
                   }
 
                   return Container(

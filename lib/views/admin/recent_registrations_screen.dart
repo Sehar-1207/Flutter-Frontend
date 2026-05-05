@@ -50,13 +50,13 @@ class _RecentRegistrationsScreenState extends State<RecentRegistrationsScreen> {
 
             // Base role color
             Color roleColor = const Color(0xFF4A3AFF);
-            Color roleBg = roleColor.withOpacity(0.1);
+            Color roleBg = roleColor.withValues(alpha:0.1);
             if (role.toString().toLowerCase() == 'teacher') {
               roleColor = const Color(0xFF00B4D8);
-              roleBg = roleColor.withOpacity(0.1);
+              roleBg = roleColor.withValues(alpha:0.1);
             } else if (role.toString().toLowerCase() == 'admin') {
               roleColor = const Color(0xFF00C9A7);
-              roleBg = roleColor.withOpacity(0.1);
+              roleBg = roleColor.withValues(alpha:0.1);
             }
 
             return Card(

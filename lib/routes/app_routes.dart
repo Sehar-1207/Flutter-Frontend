@@ -47,7 +47,7 @@ class AppRoutes {
     ),
     GetPage(
       name: adminDashboard,
-      page: () => AdminDashboard(),
+      page: () => const AdminDashboard(),
       // Register AdminController when entering admin dashboard
       binding: BindingsBuilder(() {
         Get.put(AdminController());

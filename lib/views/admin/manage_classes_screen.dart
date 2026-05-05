@@ -67,7 +67,7 @@ class _ManageClassesScreenState extends State<ManageClassesScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF4A3AFF).withOpacity(0.1),
+                        color: const Color(0xFF4A3AFF).withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
