@@ -156,10 +156,7 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  // ─── HELPER ──────────────────────────────────────────────
-
-  /// Parses the HTTP response and returns a unified map:
-  ///   { 'success': true/false, 'data': <parsed body> or 'message': <error> }
+  
   Map<String, dynamic> _handleResponse(http.Response response) {
     final body = jsonDecode(response.body);
     if (response.statusCode >= 200 && response.statusCode < 300) {

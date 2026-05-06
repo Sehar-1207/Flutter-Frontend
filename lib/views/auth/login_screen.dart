@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
   final AuthController _auth = Get.find<AuthController>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  // Controls whether password is hidden or shown
+  
   final _hidePassword = true.obs;
 
   static const _purple = Color(0xFF4A3AFF);
@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 32),
 
-              // App icon
+              
               Container(
                 width: 56,
                 height: 56,
@@ -55,7 +55,7 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 36),
 
-              // Email field
+              
               _fieldLabel('Email'),
               const SizedBox(height: 8),
               TextField(
@@ -69,7 +69,7 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Password field
+              
               _fieldLabel('Password'),
               const SizedBox(height: 8),
               Obx(() => TextField(
@@ -101,7 +101,7 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Error message
+              
               Obx(() {
                 if (_auth.errorMessage.value.isEmpty) return const SizedBox();
                 return Padding(
@@ -114,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                 );
               }),
 
-              // Sign in button
+              
               Obx(() => SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -161,7 +161,7 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Google Sign In button
+              
               Obx(() => SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -201,7 +201,7 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 28),
 
-              // Sign up link (only students can self-register)
+              
               Center(
                 child: GestureDetector(
                   onTap: () => Get.toNamed(AppRoutes.signup),

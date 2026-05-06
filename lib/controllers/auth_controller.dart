@@ -125,7 +125,7 @@ class AuthController extends GetxController {
         Get.snackbar(
           'Account Created!',
           'Please login with your new account.',
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
         // Go back to login
         Get.offNamed(AppRoutes.login);

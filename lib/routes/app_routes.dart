@@ -9,6 +9,10 @@ import '../views/admin/manage_classes_screen.dart';
 import '../views/admin/recent_registrations_screen.dart';
 import '../views/admin/admin_profile_screen.dart';
 import '../views/teacher/teacher_dashboard.dart';
+import '../views/teacher/class_details_screen.dart';
+import '../views/teacher/mark_attendance_screen.dart';
+import '../views/teacher/attendance_history_screen.dart';
+import '../views/teacher/teacher_profile_screen.dart';
 import '../views/student/student_dashboard.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/admin_controller.dart';
@@ -20,8 +24,12 @@ class AppRoutes {
   static const signup = '/signup';
   static const adminDashboard = '/admin-dashboard';
   static const teacherDashboard = '/teacher-dashboard';
+  static const classDetails = '/class-details';
+  static const markAttendance = '/mark-attendance';
+  static const attendanceHistory = '/attendance-history';
   static const studentDashboard = '/student-dashboard';
   static const addUser = '/add-user';
+  static const teacherProfile = '/teacher-profile';
   static const manageUsers = '/manage-users';
   static const manageClasses = '/manage-classes';
   static const recentRegistrations = '/recent-registrations';
@@ -55,11 +63,27 @@ class AppRoutes {
     ),
     GetPage(
       name: teacherDashboard,
-      page: () => const TeacherDashboard(),
+      page: () => TeacherDashboard(),
+    ),
+    GetPage(
+      name: classDetails,
+      page: () => ClassDetailsScreen(),
+    ),
+    GetPage(
+      name: markAttendance,
+      page: () => MarkAttendanceScreen(),
+    ),
+    GetPage(
+      name: attendanceHistory,
+      page: () => AttendanceHistoryScreen(),
+    ),
+    GetPage(
+      name: teacherProfile,
+      page: () => TeacherProfileScreen(),
     ),
     GetPage(
       name: studentDashboard,
-      page: () => const StudentDashboard(),
+      page: () => StudentDashboard(),
     ),
     GetPage(
       name: addUser,

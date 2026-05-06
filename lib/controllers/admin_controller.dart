@@ -4,7 +4,7 @@ import '../services/api_service.dart';
 class AdminController extends GetxController {
   final ApiService _api = ApiService();
 
-  // Dashboard stats (reactive)
+  //DashBoard stats
   var isLoading = false.obs;
   var totalStudents = 0.obs;
   var totalTeachers = 0.obs;
@@ -68,7 +68,7 @@ class AdminController extends GetxController {
         fetchAdminProfile(); // Refresh the profile from backend
         Get.back(); // close screen or dialog
         Get.snackbar('Success', 'Profile updated successfully',
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
       } else {
         Get.snackbar('Error', result['message'] ?? 'Failed to update profile');
       }
@@ -84,9 +84,9 @@ class AdminController extends GetxController {
     try {
       final result = await _api.getAdminStats();
       if (result['success']) {
-        // Response shape from Picture 2: { "totalStudents": 6, ... }
+        
         final stats = result[
-            'data']; // depends on backend structure, assuming direct stats or nested
+            'data']; 
         totalStudents.value =
             stats['totalStudents'] ?? stats['data']?['totalStudents'] ?? 0;
         totalTeachers.value =
@@ -170,7 +170,7 @@ class AdminController extends GetxController {
       if (result['success']) {
         usersList.removeWhere((u) => u['_id'] == id || u['id'] == id);
         Get.snackbar('Success', 'User deleted successfully',
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
         fetchDashboardStats();
       } else {
         Get.snackbar('Error', result['message'] ?? 'Failed to delete user');
@@ -187,7 +187,7 @@ class AdminController extends GetxController {
         fetchAllUsers(); // Reload list
         Get.back(); // close dialog or screen
         Get.snackbar('Success', 'User updated successfully',
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
       } else {
         Get.snackbar('Error', result['message'] ?? 'Failed to update user');
       }
@@ -221,13 +221,13 @@ class AdminController extends GetxController {
       final result = await _api.addUser(name, email, password, role);
 
       if (result['success']) {
-        Get.back(); // Close add-user screen
-        fetchAllUsers(); // This will fetch All by default, you may adjust if needed
+        Get.back(); 
+        fetchAllUsers(); 
         fetchDashboardStats();
         Get.snackbar(
           'Success',
           'User added successfully',
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
       } else {
         errorMessage.value = result['message'] ?? 'Failed to add user';

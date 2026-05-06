@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigate();
   }
 
-  // After 2 seconds, go to the correct screen
+  
   Future<void> _navigate() async {
     await Future.delayed(const Duration(seconds: 2));
 
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = storage.read('token');
     final role = storage.read('role');
 
-    // If already logged in, go straight to the right dashboard
+    
     if (token != null && role != null) {
       switch (role) {
         case 'admin':
@@ -48,12 +48,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4A3AFF), // Purple background
+      backgroundColor: const Color(0xFF4A3AFF), 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // App icon box
+            
             Container(
               width: 90,
               height: 90,
@@ -88,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ],
         ),
       ),
-      // Version label at bottom
+      
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32),
         child: Text(
