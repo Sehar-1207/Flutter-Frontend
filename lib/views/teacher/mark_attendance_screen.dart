@@ -142,7 +142,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         leading: CircleAvatar(
-                          backgroundColor: _purple.withOpacity(0.1),
+                          backgroundColor: _purple.withValues(alpha:0.1),
                           child: Text(
                             (st['studentName']?.toString().isNotEmpty == true)
                                 ? st['studentName']
@@ -190,7 +190,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   color: status == 'Present'
-                                      ? Colors.green.withOpacity(0.15)
+                                      ? Colors.green.withValues(alpha:0.15)
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
@@ -239,7 +239,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   color: status == 'Absent'
-                                      ? Colors.red.withOpacity(0.15)
+                                      ? Colors.red.withValues(alpha:0.15)
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
@@ -312,7 +312,7 @@ class MarkAttendanceScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(

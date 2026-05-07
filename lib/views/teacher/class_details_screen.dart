@@ -181,7 +181,7 @@ class ClassDetailsScreen extends StatelessWidget {
                           icon: const Icon(Icons.add, color: _purple, size: 20),
                           label: const Text("Add students"),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _purple.withOpacity(0.1),
+                            backgroundColor: _purple.withValues(alpha:0.1),
                             foregroundColor: _purple,
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -265,7 +265,7 @@ class ClassDetailsScreen extends StatelessWidget {
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         leading: CircleAvatar(
-                          backgroundColor: _purple.withOpacity(0.1),
+                          backgroundColor: _purple.withValues(alpha:0.1),
                           child: Text(
                             (st['studentName']?.toString().isNotEmpty == true)
                                 ? st['studentName']

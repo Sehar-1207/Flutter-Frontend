@@ -14,8 +14,11 @@ import '../views/teacher/mark_attendance_screen.dart';
 import '../views/teacher/attendance_history_screen.dart';
 import '../views/teacher/teacher_profile_screen.dart';
 import '../views/student/student_dashboard.dart';
+import '../views/student/student_class_details.dart';
+import '../views/student/student_profile.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/admin_controller.dart';
+import '../controllers/student_controller.dart';
 
 class AppRoutes {
   // Route name constants
@@ -28,6 +31,8 @@ class AppRoutes {
   static const markAttendance = '/mark-attendance';
   static const attendanceHistory = '/attendance-history';
   static const studentDashboard = '/student-dashboard';
+  static const studentClassDetails = '/student-class-details';
+  static const studentProfile = '/student-profile';
   static const addUser = '/add-user';
   static const teacherProfile = '/teacher-profile';
   static const manageUsers = '/manage-users';
@@ -83,7 +88,20 @@ class AppRoutes {
     ),
     GetPage(
       name: studentDashboard,
-      page: () => StudentDashboard(),
+  page: () => const StudentDashboard(),
+  binding: BindingsBuilder(() {
+    // This is the missing piece! 
+    // It tells GetX to initialize the controller when the user hits this route.
+    Get.lazyPut<StudentController>(() => StudentController());
+  })
+    ),
+    GetPage(
+      name: studentClassDetails,
+      page: () => const StudentClassDetails(),
+    ),
+    GetPage(
+      name: studentProfile,
+      page: () => const StudentProfile(),
     ),
     GetPage(
       name: addUser,

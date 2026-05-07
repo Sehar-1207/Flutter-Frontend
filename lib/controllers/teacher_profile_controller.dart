@@ -35,10 +35,12 @@ class TeacherProfileController extends GetxController {
       String? token = GetStorage().read('token');
 
       Map<String, dynamic> body = {};
-      if (nameController.text.isNotEmpty)
+      if (nameController.text.isNotEmpty) {
         body['name'] = nameController.text.trim();
-      if (passwordController.text.isNotEmpty)
+      }
+      if (passwordController.text.isNotEmpty) {
         body['password'] = passwordController.text.trim();
+      }
 
       var response = await http.put(
         Uri.parse('${ApiService.baseUrl}/teacher/profile'),

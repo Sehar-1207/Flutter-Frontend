@@ -60,11 +60,8 @@ class AttendanceHistoryScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               _buildFigmaSummaryCard(),
-
               const SizedBox(height: 20),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
@@ -104,9 +101,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 10),
-
               Obx(() {
                 if (controller.isLoadingDaily.value) {
                   return const Center(
@@ -147,15 +142,12 @@ class AttendanceHistoryScreen extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: const BoxDecoration(
                           border: Border(
-                              bottom: BorderSide(
-                                  color: Colors
-                                      .black12)) 
-                          ),
+                              bottom: BorderSide(color: Colors.black12))),
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: CircleAvatar(
                           radius: 16,
-                          backgroundColor: _purple.withOpacity(0.1),
+                          backgroundColor: _purple.withValues(alpha: 0.1),
                           child: Text(
                             r['studentName']
                                 .toString()
@@ -192,10 +184,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                   },
                 );
               }),
-
               const SizedBox(height: 30),
-
-              
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text("STUDENTS SUMMARY",
@@ -206,7 +195,6 @@ class AttendanceHistoryScreen extends StatelessWidget {
                         letterSpacing: 1.2)),
               ),
               const SizedBox(height: 10),
-
               Obx(() {
                 if (controller.isLoadingSummary.value) {
                   return const Center(
@@ -226,7 +214,6 @@ class AttendanceHistoryScreen extends StatelessWidget {
 
                 List students = summary['students'];
 
-                
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -237,12 +224,13 @@ class AttendanceHistoryScreen extends StatelessWidget {
                     int pct = st['percentage'] ?? 0;
 
                     Color progressColor;
-                    if (pct >= 85)
+                    if (pct >= 85) {
                       progressColor = Colors.green;
-                    else if (pct >= 75)
+                    } else if (pct >= 75) {
                       progressColor = Colors.orange;
-                    else
-                      progressColor = _purple; 
+                    } else {
+                      progressColor = _purple;
+                    }
 
                     return Container(
                       margin: const EdgeInsets.only(bottom: 12),
@@ -314,7 +302,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-                color: _purple.withOpacity(0.3),
+                color: _purple.withValues(alpha: 0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 4))
           ]),
@@ -330,7 +318,6 @@ class AttendanceHistoryScreen extends StatelessWidget {
         List students = summary['students'] ?? [];
         int totalStudents = students.length;
 
-        
         int sumPercentages = 0;
         int studentsAbove75 = 0;
         for (var st in students) {

@@ -30,7 +30,7 @@ class TeacherProfileScreen extends StatelessWidget {
               child: Container(
                 width: 80,
                 height: 80,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: _purple,
                   shape: BoxShape.circle,
                 ),
