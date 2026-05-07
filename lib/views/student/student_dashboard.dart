@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -43,7 +45,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     ? name.toString().substring(0, 1).toUpperCase()
                     : 'S';
                 return UserAccountsDrawerHeader(
-                  decoration: const BoxDecoration(color: Color(0xFF4A3AFF),),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF4A3AFF),
+                  ),
                   accountName:
                       Text(name, style: const TextStyle(color: Colors.white)),
                   accountEmail: Text(p['email'] ?? p['studentEmail'] ?? '',
@@ -60,7 +64,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   Icons.person,
                   color: Color.fromARGB(255, 37, 151, 136),
                 ),
-                title: const Text('Profile',style: TextStyle(color:Color.fromARGB(255, 33, 142, 127)),),
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(color: Color.fromARGB(255, 33, 142, 127)),
+                ),
                 onTap: () => Get.toNamed(AppRoutes.studentProfile),
               ),
               const Divider(),
@@ -307,7 +314,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                   Column(children: [
                                     Text('$classPercent%',
                                         style: const TextStyle(
-                                            color: Color.fromARGB(255, 67, 175, 160),
+                                            color: Color.fromARGB(
+                                                255, 67, 175, 160),
                                             fontWeight: FontWeight.bold)),
                                     const SizedBox(height: 4),
                                     const Text('attendance',
@@ -331,6 +339,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: 0,
+        onTap: (index) {
+          if (index == 3) {
+            // Person icon → navigate to student profile
+            Get.toNamed(AppRoutes.studentProfile);
+          }
+          // Add other tab navigation here if needed
+        },
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.menu_book_outlined), label: ''),

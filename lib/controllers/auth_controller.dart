@@ -27,26 +27,26 @@ class AuthController extends GetxController {
     }
 
     isLoading.value = true;
-    errorMessage.value = '';
+  errorMessage.value = '';
 
-    try {
-      final result = await _api.login(email, password);
+  try {
+    final result = await _api.login(email, password);
 
-      if (result['success']) {
-        final data = result['data'];
-        // Save token and role to local storage
-        _storage.write('token', data['token']);
-        _storage.write('role', data['role']);
-        // Go to the right dashboard based on role
-        _navigateByRole(data['role']);
-      } else {
-        errorMessage.value = result['message'] ?? 'Login failed';
-      }
-    } catch (e) {
-      errorMessage.value = 'Network error. Please check your connection.';
-    } finally {
-      isLoading.value = false;
+    if (result['success']) {
+      final data = result['data'];
+      _storage.write('token', data['token']);
+      _storage.write('role', data['role']);
+      _storage.write('name', data['name']);        // ← ADD THIS LINE
+      _storage.write('isGoogleUser', false);        // ← ADD THIS LINE
+      _navigateByRole(data['role']);
+    } else {
+      errorMessage.value = result['message'] ?? 'Login failed';
     }
+  } catch (e) {
+    errorMessage.value = 'Network error. Please check your connection.';
+  } finally {
+    isLoading.value = false;
+  }
   }
 
   Future<void> loginWithGoogle() async {
@@ -83,9 +83,11 @@ class AuthController extends GetxController {
 
       if (result['success']) {
         final data = result['data'];
-
+        // In AuthController.login() — after result['success']
         _storage.write('token', data['token']);
         _storage.write('role', data['role']);
+        _storage.write('name', data['name']); // ← ADD THIS
+        _storage.write('isGoogleUser', false); // ← ADD THIS
 
         _navigateByRole(data['role']);
       } else {

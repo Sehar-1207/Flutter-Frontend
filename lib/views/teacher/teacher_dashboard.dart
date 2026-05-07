@@ -12,18 +12,47 @@ class TeacherController extends GetxController {
   var classes = [].obs;
   var totalClasses = 0.obs;
   var searchQuery = "".obs;
-  var teacherInitial = "T".obs; 
-  var teacherName = "Teacher".obs;
+  var teacherInitial = "".obs;
+  var teacherName = "".obs;
 
   @override
   void onInit() {
     super.onInit();
-    String? name = GetStorage().read('name');
-    if (name != null && name.isNotEmpty) {
-      teacherInitial.value = name[0].toUpperCase();
-      teacherName.value = name;
-    }
+    _loadNameFromStorage(); // show instantly from cache
+    fetchTeacherName();     // then correct from server silently
     fetchDashboardData();
+  }
+
+  void _loadNameFromStorage() {
+    final String? name = GetStorage().read('name');
+    if (name != null && name.isNotEmpty) {
+      teacherName.value = name;
+      teacherInitial.value = name[0].toUpperCase();
+    }
+  }
+
+  Future<void> fetchTeacherName() async {
+    try {
+      final String? token = GetStorage().read('token');
+      final response = await http.get(
+        Uri.parse('${ApiService.baseUrl}/teacher/profile'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data'];
+        final String freshName = data['name'] ?? '';
+        if (freshName.isNotEmpty) {
+          await GetStorage().write('name', freshName);
+          teacherName.value = freshName;
+          teacherInitial.value = freshName[0].toUpperCase();
+        }
+      }
+    } catch (_) {
+      // silently fail — cached value already shown
+    }
   }
 
   Future<void> fetchDashboardData() async {
@@ -84,15 +113,11 @@ class TeacherController extends GetxController {
 
   void onSearchChanged(String query) {
     searchQuery.value = query;
-    fetchClasses(); 
+    fetchClasses();
   }
 
   void onProfileUpdated() {
-    String? name = GetStorage().read('name');
-    if (name != null && name.isNotEmpty) {
-      teacherInitial.value = name[0].toUpperCase();
-      teacherName.value = name;
-    }
+    _loadNameFromStorage();
   }
 
   Future<void> createClass(int semesterNum, String semesterStr,
@@ -115,17 +140,17 @@ class TeacherController extends GetxController {
           "semesterNumber": semesterNum,
           "semester": semesterStr,
           "subjectName": subjectName,
-          "sections": [section]
+          "sections": [section],
         }),
       );
 
-      Get.back(); 
+      Get.back();
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        Get.back(); 
+        Get.back();
         Get.snackbar("Success", "Class created successfully!",
             snackPosition: SnackPosition.TOP);
-        fetchDashboardData(); 
+        fetchDashboardData();
       } else {
         var errorData = json.decode(response.body);
         Get.snackbar("Error", errorData['message'] ?? "Failed to create class",
@@ -133,17 +158,24 @@ class TeacherController extends GetxController {
       }
     } catch (e) {
       if (Get.isDialogOpen ?? false) Get.back();
-      Get.snackbar("Error", "Network error.", snackPosition: SnackPosition.TOP);
+      Get.snackbar("Error", "Network error.",
+          snackPosition: SnackPosition.TOP);
     }
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// DASHBOARD VIEW
+// ═══════════════════════════════════════════════════════════════════════════════
 
 class TeacherDashboard extends StatelessWidget {
   TeacherDashboard({super.key});
 
   static const _purple = Color(0xFF4A3AFF);
-  final TeacherController controller = Get.put(TeacherController());
+
+  final TeacherController controller =
+      Get.put(TeacherController(), permanent: false);
+  final RxInt _currentIndex = 0.obs;
 
   void _showCreateClassDialog(BuildContext context) {
     final semesterNumCtrl = TextEditingController();
@@ -163,10 +195,9 @@ class TeacherDashboard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Create New Class",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              const Text("Create New Class",
+                  style:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 20),
               TextField(
                 controller: semesterNumCtrl,
@@ -205,13 +236,17 @@ class TeacherDashboard extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    final num = int.tryParse(semesterNumCtrl.text.trim()) ?? 0;
+                    final num =
+                        int.tryParse(semesterNumCtrl.text.trim()) ?? 0;
                     if (num > 0 &&
                         semesterStrCtrl.text.isNotEmpty &&
                         subjectCtrl.text.isNotEmpty &&
                         sectionCtrl.text.isNotEmpty) {
-                      controller.createClass(num, semesterStrCtrl.text.trim(),
-                          subjectCtrl.text.trim(), sectionCtrl.text.trim());
+                      controller.createClass(
+                          num,
+                          semesterStrCtrl.text.trim(),
+                          subjectCtrl.text.trim(),
+                          sectionCtrl.text.trim());
                     } else {
                       Get.snackbar(
                           "Validation", "Please fill all fields correctly.");
@@ -222,7 +257,8 @@ class TeacherDashboard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: const Text("Create Class",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style:
+                          TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
             ],
@@ -231,6 +267,16 @@ class TeacherDashboard extends StatelessWidget {
       ),
       isScrollControlled: true,
     );
+  }
+
+  Future<void> _navigateToProfile() async {
+    final bool? updated = await Get.toNamed(
+      AppRoutes.teacherProfile,
+      arguments: {'name': controller.teacherName.value},
+    ) as bool?;
+    if (updated == true) {
+      controller.onProfileUpdated();
+    }
   }
 
   @override
@@ -255,21 +301,20 @@ class TeacherDashboard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.person_outline, color: _purple),
+                leading:
+                    const Icon(Icons.person_outline, color: _purple),
                 title: const Text('Profile'),
                 onTap: () async {
-                  Navigator.pop(context); 
-                  bool? updated = await Get.toNamed(AppRoutes.teacherProfile);
-                  if (updated == true) {
-                    controller.onProfileUpdated();
-                  }
+                  Navigator.pop(context);
+                  await _navigateToProfile();
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.logout, color: Colors.redAccent),
+                leading:
+                    const Icon(Icons.logout, color: Colors.redAccent),
                 title: const Text('Logout'),
                 onTap: () {
-                  Navigator.pop(context); 
+                  Navigator.pop(context);
                   GetStorage().erase();
                   Get.offAllNamed(AppRoutes.login);
                 },
@@ -289,42 +334,52 @@ class TeacherDashboard extends StatelessWidget {
         ),
         title: const Text(
           'My Classes',
-          style:
-              TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.w600),
+          style: TextStyle(
+              color: Color(0xFF1A1A2E), fontWeight: FontWeight.w600),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: GestureDetector(
-              onTap: () async {
-                bool? updated = await Get.toNamed(AppRoutes.teacherProfile);
-                if (updated == true) {
-                  controller.onProfileUpdated();
-                }
-              },
-              child: Obx(() => CircleAvatar(
-                    backgroundColor: _purple.withValues(alpha:0.2),
-                    child: Text(
-                      controller.teacherInitial.value,
-                      style: const TextStyle(
-                        color: _purple,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )),
+              onTap: _navigateToProfile,
+              child: Obx(() {
+                final initial = controller.teacherInitial.value;
+                return CircleAvatar(
+                  backgroundColor: _purple.withValues(alpha: 0.2),
+                  child: initial.isEmpty
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: _purple,
+                          ),
+                        )
+                      : Text(
+                          initial,
+                          style: const TextStyle(
+                            color: _purple,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                );
+              }),
             ),
           ),
         ],
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
               Obx(() => Text(
-                    "Welcome back, ${controller.teacherName.value}",
+                    controller.teacherName.value.isEmpty
+                        ? "Welcome back!"
+                        : "Welcome back, ${controller.teacherName.value}",
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -332,64 +387,54 @@ class TeacherDashboard extends StatelessWidget {
                     ),
                   )),
               const SizedBox(height: 20),
-
-              
-              Obx(() {
-                return Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: _purple,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Total Classes",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 16,
+              Obx(() => Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: _purple,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Total Classes",
+                              style: TextStyle(
+                                  color: Colors.white70, fontSize: 16),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "${controller.totalClasses.value}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(height: 8),
+                            Text(
+                              "${controller.totalClasses.value}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha:0.2),
-                          shape: BoxShape.circle,
+                          ],
                         ),
-                        child: const Icon(Icons.class_,
-                            color: Colors.white, size: 30),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.class_,
+                              color: Colors.white, size: 30),
+                        ),
+                      ],
+                    ),
+                  )),
               const SizedBox(height: 20),
-
-              
               TextField(
-                onChanged: (val) {
-                 
-                  controller.onSearchChanged(val);
-                },
+                onChanged: controller.onSearchChanged,
                 decoration: InputDecoration(
                   hintText: "Search classes...",
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  prefixIcon:
+                      const Icon(Icons.search, color: Colors.grey),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -399,22 +444,17 @@ class TeacherDashboard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
               Expanded(
                 child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                  if (controller.isLoading.value ||
+                      controller.isSearchLoading.value) {
+                    return const Center(
+                        child: CircularProgressIndicator());
                   }
-
-                  if (controller.isSearchLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
                   if (controller.classes.isEmpty) {
                     return const Center(
                         child: Text("No classes found. Create one!"));
                   }
-
                   return ListView.builder(
                     itemCount: controller.classes.length,
                     itemBuilder: (context, index) {
@@ -422,18 +462,18 @@ class TeacherDashboard extends StatelessWidget {
                       String sectionStr = "";
                       if (c['sections'] != null) {
                         if (c['sections'] is List) {
-                          sectionStr = (c['sections'] as List).join(", ");
+                          sectionStr =
+                              (c['sections'] as List).join(", ");
                         } else {
                           sectionStr = c['sections'].toString();
                         }
                       } else {
                         sectionStr = "A";
                       }
-
                       return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(AppRoutes.classDetails, arguments: c);
-                        },
+                        onTap: () => Get.toNamed(
+                            AppRoutes.classDetails,
+                            arguments: c),
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.all(16),
@@ -442,7 +482,8 @@ class TeacherDashboard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withValues(alpha:0.05),
+                                color:
+                                    Colors.grey.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -454,8 +495,9 @@ class TeacherDashboard extends StatelessWidget {
                                 height: 50,
                                 width: 50,
                                 decoration: BoxDecoration(
-                                  color: _purple.withValues(alpha:0.1),
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: _purple.withValues(alpha: 0.1),
+                                  borderRadius:
+                                      BorderRadius.circular(12),
                                 ),
                                 child: const Center(
                                   child: Text(
@@ -470,7 +512,8 @@ class TeacherDashboard extends StatelessWidget {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       c['subjectName'] ?? "Subject Name",
@@ -491,10 +534,8 @@ class TeacherDashboard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              const Icon(
-                                Icons.chevron_right,
-                                color: Colors.grey,
-                              ),
+                              const Icon(Icons.chevron_right,
+                                  color: Colors.grey),
                             ],
                           ),
                         ),
@@ -512,31 +553,31 @@ class TeacherDashboard extends StatelessWidget {
         backgroundColor: _purple,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: _purple,
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        currentIndex: 0,
-        onTap: (index) async {
-          if (index == 3) {
-            bool? updated = await Get.toNamed(AppRoutes.teacherProfile);
-            if (updated == true) {
-              controller.onProfileUpdated();
-            }
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_outlined), label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.check_circle_outline), label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
-        ],
-      ),
+      bottomNavigationBar: Obx(() => BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: _purple,
+            unselectedItemColor: Colors.grey,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            currentIndex: _currentIndex.value,
+            onTap: (index) async {
+              if (index == 3) {
+                await _navigateToProfile();
+              } else {
+                _currentIndex.value = index;
+              }
+            },
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.menu_book_outlined), label: ''),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.check_circle_outline), label: ''),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.bar_chart_outlined), label: ''),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline), label: ''),
+            ],
+          )),
     );
   }
 }
