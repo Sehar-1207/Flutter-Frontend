@@ -41,6 +41,16 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  Future<Map<String, dynamic>> googleLogin(String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/google-login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'token': token}),
+    );
+
+    return _handleResponse(response);
+  }
+
   /// POST /api/auth/register  (students only)
   Future<Map<String, dynamic>> register(
       String name, String email, String password) async {
@@ -146,10 +156,7 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  // ─── HELPER ──────────────────────────────────────────────
-
-  /// Parses the HTTP response and returns a unified map:
-  ///   { 'success': true/false, 'data': <parsed body> or 'message': <error> }
+  
   Map<String, dynamic> _handleResponse(http.Response response) {
     final body = jsonDecode(response.body);
     if (response.statusCode >= 200 && response.statusCode < 300) {

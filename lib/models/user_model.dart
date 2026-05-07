@@ -1,4 +1,4 @@
-// Simple model to hold logged-in user info decoded from the API response
+
 class UserModel {
   final String id;
   final String email;

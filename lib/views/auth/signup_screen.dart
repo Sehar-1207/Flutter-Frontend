@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
 
-// Students can register themselves. Teachers/Admins are created by an admin.
+
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
 
@@ -137,7 +137,7 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  // ─── Helpers ─────────────────────────────────────────────
+  
 
   Widget _fieldLabel(String text) => Text(
         text,

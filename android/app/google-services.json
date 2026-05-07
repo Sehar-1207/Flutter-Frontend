@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "580841064247",
+    "project_id": "attandancemanagement-50fe4",
+    "storage_bucket": "attandancemanagement-50fe4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580841064247:android:482dd0cd7b58d7cba4bcb2",
+        "android_client_info": {
+          "package_name": "com.example.flutter_frontend_attendance_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580841064247-7n24d09evjjfqoenji836c1on5l1l26l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEhfIViy0GlyrwwjDd4XBhosUbW6Ib64Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "580841064247-7n24d09evjjfqoenji836c1on5l1l26l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

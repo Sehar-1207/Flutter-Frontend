@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../services/api_service.dart';
 import '../routes/app_routes.dart';
 
@@ -47,6 +49,55 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> loginWithGoogle() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        isLoading.value = false;
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final idToken = await userCredential.user!.getIdToken();
+
+      if (idToken == null) {
+        errorMessage.value = "Google login failed";
+        return;
+      }
+
+      //  Backend call
+      final result = await _api.googleLogin(idToken!);
+
+      if (result['success']) {
+        final data = result['data'];
+
+        _storage.write('token', data['token']);
+        _storage.write('role', data['role']);
+
+        _navigateByRole(data['role']);
+      } else {
+        errorMessage.value = result['message'] ?? 'Google login failed';
+      }
+    } catch (e, stackTrace) {
+      print('Google login exception: $e\n$stackTrace');
+      errorMessage.value = 'Google login error: $e';
+    } finally {
+      isLoading.value = false;
+    }
+  }
   // ─── REGISTER (students only) ────────────────────────────
 
   Future<void> register(String name, String email, String password) async {
@@ -74,7 +125,7 @@ class AuthController extends GetxController {
         Get.snackbar(
           'Account Created!',
           'Please login with your new account.',
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
         // Go back to login
         Get.offNamed(AppRoutes.login);
