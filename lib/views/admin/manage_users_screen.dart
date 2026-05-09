@@ -13,11 +13,21 @@ class ManageUsersScreen extends StatefulWidget {
 class _ManageUsersScreenState extends State<ManageUsersScreen> {
   final AdminController _admin = Get.find<AdminController>();
   String _selectedFilter = 'All';
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _admin.fetchAllUsers();
+  }
+
+  void _onSearchChanged(String query) {
+    _searchQuery = query;
+    if (_searchQuery.isEmpty) {
+      _admin.fetchAllUsers(role: _selectedFilter);
+    } else {
+      _admin.searchUsers(_searchQuery, role: _selectedFilter);
+    }
   }
 
   void _showEditDialog(Map<String, dynamic> user) {
@@ -83,7 +93,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
-        
       ),
       backgroundColor: const Color(0xFFF5F6FA),
       body: Column(
@@ -94,6 +103,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
             child: Column(
               children: [
                 TextField(
+                  onChanged: _onSearchChanged,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
                     hintText: 'Search...',
@@ -121,11 +131,15 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                             setState(() {
                               _selectedFilter = filter;
                             });
-                            // Call API to fetch specific role
-                            _admin.fetchAllUsers(role: filter);
+                            // Trigger search or fetch all based on current query
+                            if (_searchQuery.isEmpty) {
+                              _admin.fetchAllUsers(role: filter);
+                            } else {
+                              _admin.searchUsers(_searchQuery, role: filter);
+                            }
                           },
                           selectedColor:
-                              const Color(0xFF4A3AFF).withValues(alpha:0.1),
+                              const Color(0xFF4A3AFF).withValues(alpha: 0.1),
                           labelStyle: TextStyle(
                             color: isSelected
                                 ? const Color(0xFF4A3AFF)
@@ -167,16 +181,16 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
                   // Role Badge Color
                   Color roleColor = Colors.grey;
-                  Color roleBg = Colors.grey.withValues(alpha:0.1);
+                  Color roleBg = Colors.grey.withValues(alpha: 0.1);
                   if (role.toString().toLowerCase() == 'student') {
                     roleColor = const Color(0xFF4A3AFF);
-                    roleBg = const Color(0xFF4A3AFF).withValues(alpha:0.1);
+                    roleBg = const Color(0xFF4A3AFF).withValues(alpha: 0.1);
                   } else if (role.toString().toLowerCase() == 'teacher') {
                     roleColor = const Color(0xFF00B4D8);
-                    roleBg = const Color(0xFF00B4D8).withValues(alpha:0.1);
+                    roleBg = const Color(0xFF00B4D8).withValues(alpha: 0.1);
                   } else if (role.toString().toLowerCase() == 'admin') {
                     roleColor = const Color(0xFF00C9A7);
-                    roleBg = const Color(0xFF00C9A7).withValues(alpha:0.1);
+                    roleBg = const Color(0xFF00C9A7).withValues(alpha: 0.1);
                   }
 
                   return Container(

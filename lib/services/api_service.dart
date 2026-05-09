@@ -157,7 +157,20 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  
+  /// GET /api/admin/users/search
+  Future<Map<String, dynamic>> searchUsers(String query, {String? role}) async {
+    String url =
+        '$baseUrl/admin/users/search?query=${Uri.encodeComponent(query)}';
+    if (role != null && role != 'All') {
+      url += '&role=${Uri.encodeComponent(role)}';
+    }
+    final response = await http.get(
+      Uri.parse(url),
+      headers: authHeaders,
+    );
+    return _handleResponse(response);
+  }
+
   Map<String, dynamic> _handleResponse(http.Response response) {
     final body = jsonDecode(response.body);
     if (response.statusCode >= 200 && response.statusCode < 300) {

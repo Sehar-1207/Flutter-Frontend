@@ -84,9 +84,7 @@ class AdminController extends GetxController {
     try {
       final result = await _api.getAdminStats();
       if (result['success']) {
-        
-        final stats = result[
-            'data']; 
+        final stats = result['data'];
         totalStudents.value =
             stats['totalStudents'] ?? stats['data']?['totalStudents'] ?? 0;
         totalTeachers.value =
@@ -164,6 +162,23 @@ class AdminController extends GetxController {
     }
   }
 
+  Future<void> searchUsers(String query, {String role = 'All'}) async {
+    isUsersLoading.value = true;
+    try {
+      final result = await _api.searchUsers(query, role: role);
+      if (result['success']) {
+        final data = result['data'] is List
+            ? result['data']
+            : result['data']['data'] ?? [];
+        usersList.assignAll(data);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to search users');
+    } finally {
+      isUsersLoading.value = false;
+    }
+  }
+
   Future<void> deleteUser(String id) async {
     try {
       final result = await _api.deleteUser(id);
@@ -221,8 +236,8 @@ class AdminController extends GetxController {
       final result = await _api.addUser(name, email, password, role);
 
       if (result['success']) {
-        Get.back(); 
-        fetchAllUsers(); 
+        Get.back();
+        fetchAllUsers();
         fetchDashboardStats();
         Get.snackbar(
           'Success',
