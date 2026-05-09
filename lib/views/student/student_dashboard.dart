@@ -340,7 +340,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
         showUnselectedLabels: false,
         currentIndex: 0,
         onTap: (index) {
-          if (index == 3) {
+          if (index == 1) {
             // Person icon → navigate to student profile
             Get.toNamed(AppRoutes.studentProfile);
           }
@@ -349,10 +349,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.menu_book_outlined), label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.check_circle_outline), label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
         ],
       ),

@@ -83,10 +83,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.filter_alt_outlined), onPressed: () {}),
-        ],
+        
       ),
       backgroundColor: const Color(0xFFF5F6FA),
       body: Column(

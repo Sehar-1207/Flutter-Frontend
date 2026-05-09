@@ -10,8 +10,9 @@ class ApiService {
   // Real device       → http://YOUR_PC_LOCAL_IP:5000/api
   //   (e.g. http://192.168.1.5:5000/api)
   // -------------------------------------------------------
-  static const String baseUrl = 'http://localhost:3000/api';
+  // static const String baseUrl = 'http://localhost:3000/api';
   // static const String baseUrl = 'http://192.168.100.5:5000/api';
+  static const String baseUrl = 'https://flutter-backend-gtkr.onrender.com/api';
 
   final _storage = GetStorage();
 

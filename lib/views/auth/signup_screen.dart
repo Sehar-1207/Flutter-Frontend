@@ -51,7 +51,7 @@ class SignupScreen extends StatelessWidget {
             const SizedBox(height: 8),
             _textField(
               controller: _nameCtrl,
-              hint: 'Sara Ahmed',
+              hint: 'User',
             ),
 
             const SizedBox(height: 20),
@@ -61,7 +61,7 @@ class SignupScreen extends StatelessWidget {
             const SizedBox(height: 8),
             _textField(
               controller: _emailCtrl,
-              hint: 'sara.ahmed@school.edu',
+              hint: 'user@gmail.com',
               keyboardType: TextInputType.emailAddress,
             ),
 
