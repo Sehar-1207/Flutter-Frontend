@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                 controller: _emailCtrl,
                 keyboardType: TextInputType.emailAddress,
                 decoration: _inputDecoration(
-                  hint: 'sara.ahmed@school.edu',
+                  hint: 'user@gmail.com',
                   prefix: Icons.email_outlined,
                 ),
               ),
@@ -91,13 +91,13 @@ class LoginScreen extends StatelessWidget {
                   )),
 
               const SizedBox(height: 8),
-              const Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  'Forgot password?',
-                  style: TextStyle(color: _purple, fontSize: 14),
-                ),
-              ),
+              // const Align(
+              //   alignment: Alignment.centerRight,
+              //   child: Text(
+              //     'Forgot password?',
+              //     style: TextStyle(color: _purple, fontSize: 14),
+              //   ),
+              // ),
 
               const SizedBox(height: 20),
 

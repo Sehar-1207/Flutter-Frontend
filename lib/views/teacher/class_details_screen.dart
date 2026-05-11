@@ -109,12 +109,7 @@ class ClassDetailsScreen extends StatelessWidget {
               style: const TextStyle(
                   color: Color(0xFF1A1A2E), fontWeight: FontWeight.w600),
             )),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+        
       ),
       body: SafeArea(
         child: Column(

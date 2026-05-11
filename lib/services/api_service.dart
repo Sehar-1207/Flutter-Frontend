@@ -10,8 +10,9 @@ class ApiService {
   // Real device       → http://YOUR_PC_LOCAL_IP:5000/api
   //   (e.g. http://192.168.1.5:5000/api)
   // -------------------------------------------------------
-  static const String baseUrl = 'http://localhost:3000/api';
+  // static const String baseUrl = 'http://localhost:3000/api';
   // static const String baseUrl = 'http://192.168.100.5:5000/api';
+  static const String baseUrl = 'https://flutter-backend-gtkr.onrender.com/api';
 
   final _storage = GetStorage();
 
@@ -156,7 +157,20 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  
+  /// GET /api/admin/users/search
+  Future<Map<String, dynamic>> searchUsers(String query, {String? role}) async {
+    String url =
+        '$baseUrl/admin/users/search?query=${Uri.encodeComponent(query)}';
+    if (role != null && role != 'All') {
+      url += '&role=${Uri.encodeComponent(role)}';
+    }
+    final response = await http.get(
+      Uri.parse(url),
+      headers: authHeaders,
+    );
+    return _handleResponse(response);
+  }
+
   Map<String, dynamic> _handleResponse(http.Response response) {
     final body = jsonDecode(response.body);
     if (response.statusCode >= 200 && response.statusCode < 300) {

@@ -19,7 +19,7 @@ class TeacherController extends GetxController {
   void onInit() {
     super.onInit();
     _loadNameFromStorage(); // show instantly from cache
-    fetchTeacherName();     // then correct from server silently
+    fetchTeacherName(); // then correct from server silently
     fetchDashboardData();
   }
 
@@ -158,8 +158,7 @@ class TeacherController extends GetxController {
       }
     } catch (e) {
       if (Get.isDialogOpen ?? false) Get.back();
-      Get.snackbar("Error", "Network error.",
-          snackPosition: SnackPosition.TOP);
+      Get.snackbar("Error", "Network error.", snackPosition: SnackPosition.TOP);
     }
   }
 }
@@ -196,8 +195,7 @@ class TeacherDashboard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Create New Class",
-                  style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 20),
               TextField(
                 controller: semesterNumCtrl,
@@ -236,17 +234,13 @@ class TeacherDashboard extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    final num =
-                        int.tryParse(semesterNumCtrl.text.trim()) ?? 0;
+                    final num = int.tryParse(semesterNumCtrl.text.trim()) ?? 0;
                     if (num > 0 &&
                         semesterStrCtrl.text.isNotEmpty &&
                         subjectCtrl.text.isNotEmpty &&
                         sectionCtrl.text.isNotEmpty) {
-                      controller.createClass(
-                          num,
-                          semesterStrCtrl.text.trim(),
-                          subjectCtrl.text.trim(),
-                          sectionCtrl.text.trim());
+                      controller.createClass(num, semesterStrCtrl.text.trim(),
+                          subjectCtrl.text.trim(), sectionCtrl.text.trim());
                     } else {
                       Get.snackbar(
                           "Validation", "Please fill all fields correctly.");
@@ -257,8 +251,7 @@ class TeacherDashboard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: const Text("Create Class",
-                      style:
-                          TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
             ],
@@ -301,8 +294,7 @@ class TeacherDashboard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading:
-                    const Icon(Icons.person_outline, color: _purple),
+                leading: const Icon(Icons.person_outline, color: _purple),
                 title: const Text('Profile'),
                 onTap: () async {
                   Navigator.pop(context);
@@ -310,8 +302,7 @@ class TeacherDashboard extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading:
-                    const Icon(Icons.logout, color: Colors.redAccent),
+                leading: const Icon(Icons.logout, color: Colors.redAccent),
                 title: const Text('Logout'),
                 onTap: () {
                   Navigator.pop(context);
@@ -334,8 +325,8 @@ class TeacherDashboard extends StatelessWidget {
         ),
         title: const Text(
           'My Classes',
-          style: TextStyle(
-              color: Color(0xFF1A1A2E), fontWeight: FontWeight.w600),
+          style:
+              TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.w600),
         ),
         actions: [
           Padding(
@@ -370,8 +361,7 @@ class TeacherDashboard extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -433,8 +423,7 @@ class TeacherDashboard extends StatelessWidget {
                 onChanged: controller.onSearchChanged,
                 decoration: InputDecoration(
                   hintText: "Search classes...",
-                  prefixIcon:
-                      const Icon(Icons.search, color: Colors.grey),
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -448,8 +437,7 @@ class TeacherDashboard extends StatelessWidget {
                 child: Obx(() {
                   if (controller.isLoading.value ||
                       controller.isSearchLoading.value) {
-                    return const Center(
-                        child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (controller.classes.isEmpty) {
                     return const Center(
@@ -462,8 +450,7 @@ class TeacherDashboard extends StatelessWidget {
                       String sectionStr = "";
                       if (c['sections'] != null) {
                         if (c['sections'] is List) {
-                          sectionStr =
-                              (c['sections'] as List).join(", ");
+                          sectionStr = (c['sections'] as List).join(", ");
                         } else {
                           sectionStr = c['sections'].toString();
                         }
@@ -471,9 +458,8 @@ class TeacherDashboard extends StatelessWidget {
                         sectionStr = "A";
                       }
                       return GestureDetector(
-                        onTap: () => Get.toNamed(
-                            AppRoutes.classDetails,
-                            arguments: c),
+                        onTap: () =>
+                            Get.toNamed(AppRoutes.classDetails, arguments: c),
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.all(16),
@@ -482,8 +468,7 @@ class TeacherDashboard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    Colors.grey.withValues(alpha: 0.05),
+                                color: Colors.grey.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -496,8 +481,7 @@ class TeacherDashboard extends StatelessWidget {
                                 width: 50,
                                 decoration: BoxDecoration(
                                   color: _purple.withValues(alpha: 0.1),
-                                  borderRadius:
-                                      BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: const Center(
                                   child: Text(
@@ -512,8 +496,7 @@ class TeacherDashboard extends StatelessWidget {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       c['subjectName'] ?? "Subject Name",
@@ -560,9 +543,9 @@ class TeacherDashboard extends StatelessWidget {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             currentIndex: _currentIndex.value,
-            onTap: (index) async {
-              if (index == 3) {
-                await _navigateToProfile();
+            onTap: (index) {
+              if (index == 1) {
+                _navigateToProfile();
               } else {
                 _currentIndex.value = index;
               }
@@ -570,10 +553,6 @@ class TeacherDashboard extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(Icons.menu_book_outlined), label: ''),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.check_circle_outline), label: ''),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart_outlined), label: ''),
               BottomNavigationBarItem(
                   icon: Icon(Icons.person_outline), label: ''),
             ],
